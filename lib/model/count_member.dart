@@ -1,5 +1,5 @@
 class CountMember {
-  final int id;
+  final String id;
   final String name;
   final int lastCount;
   final int flyAwayCount;
@@ -22,4 +22,15 @@ class CountMember {
         flyAwayCount = json['fly_away_count'],
         doubleFlyAwayCount = json['double_fly_away_count'],
         countGroupId = json['count_group_id'];
+
+  Map<String, dynamic> toLocalStorage() {
+    return {
+      'id': id,
+      'name': name,
+      'lastCount': lastCount,
+      'fly_away_count': flyAwayCount,
+      'double_fly_away_count': doubleFlyAwayCount,
+      'count_group_id': countGroupId
+    };
+  }
 }

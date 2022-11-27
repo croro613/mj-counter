@@ -1,15 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mj_counter/view_model/all_provider.dart';
+
+import '../model/display_group.dart';
+import '../provider/all_provider.dart';
 
 class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final groupInformation = ref.watch(countProvider);
+    final selectedGroupKey = ref.watch(selectedKeyProvider);
+    var selectedGroup = groupInformation[selectedGroupKey];
+    if (groupInformation[selectedGroupKey] != null) {
+      selectedGroup as GroupInformation;
+    } else {
+      return SizedBox();
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text('MJカウンター'),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Icon(Icons.add),
       ),
       body: Column(
         children: [
@@ -24,11 +38,11 @@ class HomePage extends ConsumerWidget {
               onPressed: () {},
               child: Column(
                 children: [
-                  Text('ビリ:'),
+                  Text('ビリ:${selectedGroup.countGroup.lastRate}'),
                   SizedBox(
                     height: 5,
                   ),
-                  Text('飛び:')
+                  Text('飛び: ${selectedGroup.countGroup.flyAwayRate}')
                 ],
               ),
             ),
@@ -62,57 +76,58 @@ class HomePage extends ConsumerWidget {
               ),
             ],
           ),
-          for (var member in groupInformation.countMembers)
-            Container(
-              height: 100,
-              padding: EdgeInsets.all(6),
-              color: Colors.deepOrangeAccent.shade100.withOpacity(0.5),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 30,
-                  ),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    width: 100,
-                    child: Text(member.name),
-                  ),
-                  Container(
-                    width: 100,
-                    height: double.infinity,
-                    child: TextButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            Colors.grey.shade200),
-                        // side: MaterialStateProperty.all<BorderSide>(
-                        //   BorderSide(
-                        //     color: Colors.red, //色
-                        //     width: 1, //太さ
-                        //   ),
-                        // ),
-                      ),
-                      onPressed: () {},
-                      child: Text('${member.lastCount}回'),
+          if (selectedGroup != null && selectedGroup.countMembers != null)
+            for (var member in selectedGroup.countMembers!)
+              Container(
+                height: 100,
+                padding: const EdgeInsets.all(6),
+                color: Colors.deepOrangeAccent.shade100.withOpacity(0.5),
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 30,
                     ),
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Container(
-                    width: 100,
-                    height: double.infinity,
-                    child: TextButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            Colors.grey.shade200),
-                      ),
-                      onPressed: () {},
-                      child: Text('${member.flyAwayCount}回'),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      width: 100,
+                      child: Text(member.name),
                     ),
-                  )
-                ],
-              ),
-            )
+                    Container(
+                      width: 100,
+                      height: double.infinity,
+                      child: TextButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Colors.grey.shade200),
+                          // side: MaterialStateProperty.all<BorderSide>(
+                          //   BorderSide(
+                          //     color: Colors.red, //色
+                          //     width: 1, //太さ
+                          //   ),
+                          // ),
+                        ),
+                        onPressed: () {},
+                        child: Text('${member.lastCount}回'),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Container(
+                      width: 100,
+                      height: double.infinity,
+                      child: TextButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Colors.grey.shade200),
+                        ),
+                        onPressed: () {},
+                        child: Text('${member.flyAwayCount}回'),
+                      ),
+                    )
+                  ],
+                ),
+              )
         ],
       ),
     );

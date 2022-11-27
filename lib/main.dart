@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mj_counter/provider/all_provider.dart';
 import 'package:mj_counter/view/home_page.dart';
-import 'package:mj_counter/view_model/all_provider.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -16,7 +16,13 @@ class MyApp extends ConsumerWidget {
     final groupProvider = ref.watch(groupInformationProvider);
     return groupProvider.when(
         data: (group) {
-          ref.read(countProvider.notifier).initialize(group);
+          WidgetsBinding.instance.addPostFrameCallback(
+            (_) async {
+              //初期画面に出てくるグループ
+              ref.read(selectedKeyProvider.notifier).state =
+                  await ref.read(countProvider.notifier).initialize(group);
+            },
+          );
           return MaterialApp(
             title: 'MJ counter',
             theme: ThemeData(
@@ -34,7 +40,13 @@ class MyApp extends ConsumerWidget {
             home: HomePage(),
           );
         },
-        error: (err, stack) => const Text('error'),
+        error: (err, stack) => Container(
+              padding: EdgeInsets.only(top: 50),
+              child: Text(
+                err.toString(),
+                textDirection: TextDirection.ltr,
+              ),
+            ),
         loading: () => const CircularProgressIndicator());
   }
 }

@@ -1,10 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MemberTile extends ConsumerWidget{
+class MemberTile extends ConsumerWidget {
+  const MemberTile({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO: implement build
     return Container(
       height: 100,
       padding: EdgeInsets.all(6),
@@ -24,8 +25,8 @@ class MemberTile extends ConsumerWidget{
             height: double.infinity,
             child: TextButton(
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(
-                    Colors.grey.shade200),
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(Colors.grey.shade200),
                 // side: MaterialStateProperty.all<BorderSide>(
                 //   BorderSide(
                 //     color: Colors.red, //色
@@ -45,8 +46,8 @@ class MemberTile extends ConsumerWidget{
             height: double.infinity,
             child: TextButton(
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(
-                    Colors.grey.shade200),
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(Colors.grey.shade200),
               ),
               onPressed: () {},
               child: Text("１回"),
@@ -54,7 +55,6 @@ class MemberTile extends ConsumerWidget{
           )
         ],
       ),
-    )
+    );
   }
-
 }
